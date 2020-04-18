@@ -10,7 +10,7 @@ Tiny rust node that sends MQTT messages on startup and shutdown
 cargo install --git https://github.com/dmweis/alive_boi
 ```
 
-### Add following file to `/ets/systemd/system`
+### Add following file to `/ets/systemd/system/alive_boi.service`
 
 ``` ini
 [Unit]
