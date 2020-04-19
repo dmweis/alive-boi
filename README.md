@@ -18,6 +18,8 @@ Description=Alive Boi
 
 [Service]
 Type=simple
+Restart=on-failure
+RestartSec=5s
 ExecStart=/home/USER_NAME/.cargo/bin/alive_boi --mqtt_host mqtt.local --device_name DEVICE_NAME --topic TOPIC_NAME
 
 [Install]
