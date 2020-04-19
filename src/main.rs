@@ -1,11 +1,14 @@
 use clap::{App, Arg};
-use rumqtt::{LastWill, MqttClient, MqttOptions, QoS};
+use rumqtt::{LastWill, MqttClient, MqttOptions, QoS, ReconnectOptions, Notification};
 use serde::Serialize;
 use chrono::prelude::*;
+use log::*;
+use simplelog::*;
 
 #[derive(Serialize)]
 enum Status {
     Alive,
+    Reconnected,
     Dead,
 }
 
@@ -17,6 +20,13 @@ struct AliveReport {
 }
 
 fn main() {
+    if TermLogger::init(LevelFilter::Info, Config::default(), TerminalMode::Mixed).is_err() {
+        eprintln!("Failed to create term logger");
+        if SimpleLogger::init(LevelFilter::Info, Config::default()).is_err() {
+            eprintln!("Failed to create simple logger");
+        }
+    }
+
     let matches = App::new("Alive boi")
         .version("1.0")
         .author("David Weis <dweis7@gmail.com>")
@@ -55,12 +65,12 @@ fn main() {
         .expect("You must provide a topic name");
 
 
-    let now: DateTime<Local> = Local::now();
+    let start_time: DateTime<Local> = Local::now();
     
     let last_will_message = AliveReport {
         unit_name: device_name.to_owned(),
         status: Status::Dead,
-        start_time: now,
+        start_time: start_time,
     };
 
     let last_will = LastWill {
@@ -74,14 +84,15 @@ fn main() {
     let node_name = format!("alive_boi_{}", &device_name);
     let mqtt_options = MqttOptions::new(node_name, mqtt_host, 1883)
         .set_last_will(last_will)
-        .set_keep_alive(5);
+        .set_keep_alive(5)
+        .set_reconnect_opts(ReconnectOptions::Always(5));
     let (mut mqtt_client, notifications) =
         MqttClient::start(mqtt_options).expect("Failed to connect to MQTT host");
 
     let alive_message = AliveReport {
         unit_name: device_name.to_owned(),
         status: Status::Alive,
-        start_time: now,
+        start_time: start_time,
     };
 
     mqtt_client
@@ -94,6 +105,29 @@ fn main() {
         .expect("Failed to send alive message");
 
     for notification in notifications {
-        println!("Unexpected message {:?}", notification);
+        match notification {
+            Notification::Disconnection => {
+                warn!("Client lost connection");
+            },
+            Notification::Reconnection => {
+                warn!("client reconnected");
+                let alive_message = AliveReport {
+                    unit_name: device_name.to_owned(),
+                    status: Status::Reconnected,
+                    start_time: start_time,
+                };
+                mqtt_client
+                    .publish(
+                        topic,
+                        QoS::AtLeastOnce,
+                        false,
+                        serde_json::to_string(&alive_message).expect("Failed to serialize last will message"),
+                    )
+                    .expect("Failed to send alive message");
+            },
+            other => {
+                warn!("Unexpected message {:?}", other);
+            }
+        }
     }
 }
