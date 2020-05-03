@@ -14,5 +14,6 @@ ExecStart=/home/$(whoami)/.cargo/bin/alive_boi --mqtt_host mqtt.local --device_n
 WantedBy=default.target
 EOT
 
+sudo systemctl daemon-reload
 sudo systemctl enable alive_boi
 sudo systemctl start alive_boi
