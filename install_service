@@ -16,4 +16,4 @@ EOT
 
 sudo systemctl daemon-reload
 sudo systemctl enable alive_boi
-sudo systemctl start alive_boi
+sudo systemctl restart alive_boi
