@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+git pull
+
+cargo install --path .
+
 cat <<EOT | sudo tee /etc/systemd/system/alive_boi.service > /dev/null
 [Unit]
 Description=Alive Boi
