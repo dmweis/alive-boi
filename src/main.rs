@@ -78,7 +78,7 @@ fn main() {
         message: serde_json::to_string(&last_will_message)
             .expect("Failed to serialize last will message"),
         qos: QoS::AtLeastOnce,
-        retain: false,
+        retain: true,
     };
 
     let node_name = format!("alive_boi_{}", &device_name);
@@ -99,7 +99,7 @@ fn main() {
         .publish(
             topic,
             QoS::AtLeastOnce,
-            false,
+            true,
             serde_json::to_string(&alive_message).expect("Failed to serialize last will message"),
         )
         .expect("Failed to send alive message");
@@ -120,7 +120,7 @@ fn main() {
                     .publish(
                         topic,
                         QoS::AtLeastOnce,
-                        false,
+                        true,
                         serde_json::to_string(&alive_message).expect("Failed to serialize last will message"),
                     )
                     .expect("Failed to send alive message");
