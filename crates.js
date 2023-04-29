@@ -1,0 +1,1 @@
+window.ALL_CRATES = ["alive_boi"];

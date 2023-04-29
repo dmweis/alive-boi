@@ -1,0 +1,3 @@
+(function() {var implementors = {
+"alive_boi":[["impl <a class=\"trait\" href=\"https://docs.rs/serde/1.0.160/serde/ser/trait.Serialize.html\" title=\"trait serde::ser::Serialize\">Serialize</a> for <a class=\"enum\" href=\"alive_boi/enum.Status.html\" title=\"enum alive_boi::Status\">Status</a>"],["impl <a class=\"trait\" href=\"https://docs.rs/serde/1.0.160/serde/ser/trait.Serialize.html\" title=\"trait serde::ser::Serialize\">Serialize</a> for <a class=\"struct\" href=\"alive_boi/struct.AliveReport.html\" title=\"struct alive_boi::AliveReport\">AliveReport</a>"]]
+};if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

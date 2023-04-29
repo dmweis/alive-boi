@@ -1,0 +1,3 @@
+(function() {var implementors = {
+"alive_boi":[["impl&lt;'de&gt; <a class=\"trait\" href=\"https://docs.rs/serde/1.0.160/serde/de/trait.Deserialize.html\" title=\"trait serde::de::Deserialize\">Deserialize</a>&lt;'de&gt; for <a class=\"struct\" href=\"alive_boi/struct.MqttConfig.html\" title=\"struct alive_boi::MqttConfig\">MqttConfig</a>"]]
+};if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()
