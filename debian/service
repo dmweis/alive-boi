@@ -1,0 +1,15 @@
+[Unit]
+Description=Alive Boi
+After=network-online.target nss-lookup.target
+Wants=network-online.target
+
+[Service]
+User=aliveboi
+DynamicUser=yes
+Type=simple
+Restart=on-failure
+RestartSec=5s
+ExecStart=/usr/bin/alive-boi --config /etc/alive-boi/settings
+
+[Install]
+WantedBy=default.target
