@@ -1,16 +1,48 @@
 [package]
-name = "alive_boi"
-version = "0.1.0"
-authors = ["David Weis <davidmichaelweis@gmail.com>"]
-edition = "2018"
+authors = ["David Weis <dweis7@gmail.com>"]
+description = "Tiny systemd service that sends MQTT messages when the host is alive."
+edition = "2021"
+license = "MIT OR APACHE"
+name = "alive-boi"
+publish = false
+readme = "README.md"
+repository = "https://github.com/dmweis/alive-boi"
+version = "0.1.1"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[package.metadata.deb]
+assets = [
+  [
+    "target/release/alive-boi",
+    "/usr/bin/",
+    "755",
+  ],
+  [
+    "configuration/settings.yaml",
+    "/etc/alive-boi/settings.yaml",
+    "644",
+  ],
+]
+conf-files = ["/etc/alive-boi/settings.yaml"]
+maintainer = "David Weis <dweis7@gmail.com>"
+maintainer-scripts = "debian/"
+
+[package.metadata.deb.systemd-units]
 
 [dependencies]
+chrono = {version = "0.4", features = ["serde"]}
+clap = {version = "4.2.5", features = ["derive"]}
+mqtt-router = {git = "https://github.com/dmweis/mqtt-router", branch = "main"}
 rumqtt = "0.31.0"
-serde = { version = "1.0", features = ["derive"] }
+tokio = {version = "1", features = ["macros", "rt-multi-thread", "fs"]}
+
+serde = {version = "1.0", features = ["derive"]}
 serde_json = "1.0"
-clap = "*"
-chrono = { version = "0.4", features = ["serde"] }
-simplelog = "0.7"
-log = "0.4"
+
+tracing = {version = "0.1", features = ["log"]}
+tracing-subscriber = {version = "0.3", features = [
+  "registry",
+  "json",
+]}
+
+anyhow = {version = "1.0", features = ["backtrace"]}
+config = "0.13"
